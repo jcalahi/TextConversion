@@ -2,10 +2,17 @@ import React from 'react';
 import Util from '../../helper';
 import ButtonListItem from './button-list-item';
 
-const ButtonList = ({ onButtonClick }) => {
+const ButtonList = ({ onButtonClick, selectedTask }) => {
 
     let tasks = Util.buttonList.map((name, idx) => {
-        return <ButtonListItem buttonName={name} key={idx} onButtonClick={onButtonClick} />;
+        return (
+            <ButtonListItem 
+                buttonName={name} 
+                key={idx} 
+                onButtonClick={onButtonClick} 
+                selectedTask={selectedTask} 
+            />
+        );
     });
 
     return (

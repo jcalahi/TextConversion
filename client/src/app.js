@@ -11,7 +11,8 @@ class App extends Component {
         super();
 
         this.state = {
-            editorState: EditorState.createEmpty()
+            editorState: EditorState.createEmpty(),
+            selectedTask: null
         };
 
         this.onButtonClick = this.onButtonClick.bind(this);
@@ -21,7 +22,8 @@ class App extends Component {
             <div>
                 <Title name="JSON to HTML" type="h3"></Title>
                 <ButtonList 
-                    onButtonClick={this.onButtonClick} 
+                    onButtonClick={this.onButtonClick}
+                    selectedTask={this.state.selectedTask}
                 />
                 <p></p>
                 <Editor 
@@ -39,7 +41,8 @@ class App extends Component {
             .then((response) => { return response.json(); })
             .then((content) => { 
                 self.setState({
-                    editorState: EditorState.createWithContent(convertFromRaw(content))
+                    editorState: EditorState.createWithContent(convertFromRaw(content)),
+                    selectedTask: name
                 });
             }
         );

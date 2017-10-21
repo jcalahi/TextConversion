@@ -95,7 +95,8 @@
 	        var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
 
 	        _this.state = {
-	            editorState: _draftJs.EditorState.createEmpty()
+	            editorState: _draftJs.EditorState.createEmpty(),
+	            selectedTask: null
 	        };
 
 	        _this.onButtonClick = _this.onButtonClick.bind(_this);
@@ -112,7 +113,8 @@
 	                null,
 	                _react2.default.createElement(_contentTitle2.default, { name: 'JSON to HTML', type: 'h3' }),
 	                _react2.default.createElement(_buttonList2.default, {
-	                    onButtonClick: this.onButtonClick
+	                    onButtonClick: this.onButtonClick,
+	                    selectedTask: this.state.selectedTask
 	                }),
 	                _react2.default.createElement('p', null),
 	                _react2.default.createElement(_draftJs.Editor, {
@@ -133,7 +135,8 @@
 	                return response.json();
 	            }).then(function (content) {
 	                self.setState({
-	                    editorState: _draftJs.EditorState.createWithContent((0, _draftJs.convertFromRaw)(content))
+	                    editorState: _draftJs.EditorState.createWithContent((0, _draftJs.convertFromRaw)(content)),
+	                    selectedTask: name
 	                });
 	            });
 	        }
@@ -40459,11 +40462,17 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var ButtonList = function ButtonList(_ref) {
-	    var onButtonClick = _ref.onButtonClick;
+	    var onButtonClick = _ref.onButtonClick,
+	        selectedTask = _ref.selectedTask;
 
 
 	    var tasks = _helper2.default.buttonList.map(function (name, idx) {
-	        return _react2.default.createElement(_buttonListItem2.default, { buttonName: name, key: idx, onButtonClick: onButtonClick });
+	        return _react2.default.createElement(_buttonListItem2.default, {
+	            buttonName: name,
+	            key: idx,
+	            onButtonClick: onButtonClick,
+	            selectedTask: selectedTask
+	        });
 	    });
 
 	    return _react2.default.createElement(
@@ -40497,12 +40506,15 @@
 
 	var ButtonListItem = function ButtonListItem(_ref) {
 	    var buttonName = _ref.buttonName,
-	        onButtonClick = _ref.onButtonClick;
+	        onButtonClick = _ref.onButtonClick,
+	        selectedTask = _ref.selectedTask;
+
+	    var btn = _helper2.default.formatString(buttonName);
 
 	    return _react2.default.createElement(
 	        'li',
-	        { className: '', onClick: function onClick() {
-	                return onButtonClick(_helper2.default.formatString(buttonName));
+	        { className: btn === selectedTask ? 'active' : '', onClick: function onClick() {
+	                return onButtonClick(btn);
 	            } },
 	        _react2.default.createElement(
 	            'a',
