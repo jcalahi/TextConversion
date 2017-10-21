@@ -6,8 +6,13 @@ var data = {
     task3: require('../data/task3.json')
 };
 
-router.get('/:id', function(req, res) {
-    res.json(data[req.params.id] || {});
-});
+router.get('/task1', requestHandler);
+router.get('/task2', requestHandler);
+router.get('/task3', requestHandler);
+
+function requestHandler(req, res) {
+    var key = req.url.replace(/\//g, '');
+    res.json(data[key] || {});
+}
 
 module.exports = router;

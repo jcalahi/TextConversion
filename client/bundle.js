@@ -66,6 +66,18 @@
 
 	var _draftJs = __webpack_require__(185);
 
+	var _helper = __webpack_require__(323);
+
+	var _helper2 = _interopRequireDefault(_helper);
+
+	var _contentTitle = __webpack_require__(324);
+
+	var _contentTitle2 = _interopRequireDefault(_contentTitle);
+
+	var _buttonList = __webpack_require__(319);
+
+	var _buttonList2 = _interopRequireDefault(_buttonList);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -80,28 +92,57 @@
 	    function App() {
 	        _classCallCheck(this, App);
 
-	        return _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
+	        var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
 
-	        // fetch('task1')
-	        //     .then((response) => { return response.json(); })
-	        //     .then((res) => { console.log(res); });
+	        _this.state = {
+	            editorState: _draftJs.EditorState.createEmpty()
+	        };
+
+	        _this.onButtonClick = _this.onButtonClick.bind(_this);
+	        return _this;
 	    }
 
 	    _createClass(App, [{
 	        key: 'render',
 	        value: function render() {
+	            var _this2 = this;
+
 	            return _react2.default.createElement(
 	                'div',
 	                null,
-	                'Something'
+	                _react2.default.createElement(_contentTitle2.default, { name: 'JSON to HTML', type: 'h3' }),
+	                _react2.default.createElement(_buttonList2.default, {
+	                    onButtonClick: this.onButtonClick
+	                }),
+	                _react2.default.createElement('p', null),
+	                _react2.default.createElement(_draftJs.Editor, {
+	                    editorState: this.state.editorState,
+	                    onChange: function onChange(editorState) {
+	                        return _this2.setState({ editorState: editorState });
+	                    }
+	                })
 	            );
+	        }
+	    }, {
+	        key: 'onButtonClick',
+	        value: function onButtonClick(name) {
+	            var self = this;
+	            var url = _helper2.default.path + name;
+
+	            fetch(url).then(function (response) {
+	                return response.json();
+	            }).then(function (content) {
+	                self.setState({
+	                    editorState: _draftJs.EditorState.createWithContent((0, _draftJs.convertFromRaw)(content))
+	                });
+	            });
 	        }
 	    }]);
 
 	    return App;
 	}(_react.Component);
 
-	_reactDom2.default.render(_react2.default.createElement(App, null), document.getElementById('container'));
+	_reactDom2.default.render(_react2.default.createElement(App, null), document.querySelector('.container'));
 
 /***/ }),
 /* 2 */
@@ -40392,6 +40433,141 @@
 	}
 
 	module.exports = getRangeBoundingClientRect;
+
+/***/ }),
+/* 319 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _helper = __webpack_require__(323);
+
+	var _helper2 = _interopRequireDefault(_helper);
+
+	var _buttonListItem = __webpack_require__(320);
+
+	var _buttonListItem2 = _interopRequireDefault(_buttonListItem);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ButtonList = function ButtonList(_ref) {
+	    var onButtonClick = _ref.onButtonClick;
+
+
+	    var tasks = _helper2.default.buttonList.map(function (name, idx) {
+	        return _react2.default.createElement(_buttonListItem2.default, { buttonName: name, key: idx, onButtonClick: onButtonClick });
+	    });
+
+	    return _react2.default.createElement(
+	        'ul',
+	        { className: 'nav nav-tabs' },
+	        tasks
+	    );
+	};
+
+	exports.default = ButtonList;
+
+/***/ }),
+/* 320 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _helper = __webpack_require__(323);
+
+	var _helper2 = _interopRequireDefault(_helper);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ButtonListItem = function ButtonListItem(_ref) {
+	    var buttonName = _ref.buttonName,
+	        onButtonClick = _ref.onButtonClick;
+
+	    return _react2.default.createElement(
+	        'li',
+	        { className: '', onClick: function onClick() {
+	                return onButtonClick(_helper2.default.formatString(buttonName));
+	            } },
+	        _react2.default.createElement(
+	            'a',
+	            { href: 'javascript:void(0)' },
+	            buttonName
+	        )
+	    );
+	};
+
+	exports.default = ButtonListItem;
+
+/***/ }),
+/* 321 */,
+/* 322 */,
+/* 323 */
+/***/ (function(module, exports) {
+
+	'use strict';
+
+	module.exports = {
+	    buttonList: ['Task 1', 'Task 2', 'Task 3'],
+	    path: '/conversion/',
+	    headerTag: {
+	        'h1': 'h1',
+	        'h2': 'h2',
+	        'h3': 'h3',
+	        'h4': 'h4',
+	        'h5': 'h5'
+	    },
+	    formatString: function formatString(str) {
+	        return str.replace(/\s/g, '').toLowerCase();
+	    }
+	};
+
+/***/ }),
+/* 324 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _helper = __webpack_require__(323);
+
+	var _helper2 = _interopRequireDefault(_helper);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ContentTitle = function ContentTitle(props) {
+	    var CustomTag = '' + _helper2.default.headerTag[props.type];
+
+	    return _react2.default.createElement(
+	        CustomTag,
+	        null,
+	        props.name
+	    );
+	};
+
+	exports.default = ContentTitle;
 
 /***/ })
 /******/ ]);

@@ -18,8 +18,10 @@
   "homepage": "https://github.com/jcalahi/TextConversion#readme",
   "dependencies": {
     "babel-preset-stage-1": "^6.24.1",
+    "bootstrap": "^3.3.7",
     "draft-js": "^0.10.3",
     "express": "^4.16.2",
+    "jquery": "^3.2.1",
     "react": "^15.6.2",
     "react-dom": "^15.6.2"
   },
