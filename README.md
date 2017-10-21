@@ -5,6 +5,8 @@ Test project for an IT Company. This converts JSON data into HTML
 Techologies used:
 
 * Webpack 1.12.9
+* Node 6.3.1
+* NPM 3.10.3
 * Express 4.16.2
 * Bootstrap 3.3.7
 * React 15.6.2
