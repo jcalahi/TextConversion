@@ -66,15 +66,15 @@
 
 	var _draftJs = __webpack_require__(185);
 
-	var _helper = __webpack_require__(323);
+	var _helper = __webpack_require__(319);
 
 	var _helper2 = _interopRequireDefault(_helper);
 
-	var _contentTitle = __webpack_require__(324);
+	var _contentTitle = __webpack_require__(320);
 
 	var _contentTitle2 = _interopRequireDefault(_contentTitle);
 
-	var _buttonList = __webpack_require__(319);
+	var _buttonList = __webpack_require__(321);
 
 	var _buttonList2 = _interopRequireDefault(_buttonList);
 
@@ -40439,6 +40439,27 @@
 
 /***/ }),
 /* 319 */
+/***/ (function(module, exports) {
+
+	'use strict';
+
+	module.exports = {
+	    buttonList: ['Task 1', 'Task 2', 'Task 3'],
+	    path: '/conversion/',
+	    headerTag: {
+	        'h1': 'h1',
+	        'h2': 'h2',
+	        'h3': 'h3',
+	        'h4': 'h4',
+	        'h5': 'h5'
+	    },
+	    formatString: function formatString(str) {
+	        return str.replace(/\s/g, '').toLowerCase();
+	    }
+	};
+
+/***/ }),
+/* 320 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40451,11 +40472,43 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _helper = __webpack_require__(323);
+	var _helper = __webpack_require__(319);
 
 	var _helper2 = _interopRequireDefault(_helper);
 
-	var _buttonListItem = __webpack_require__(320);
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ContentTitle = function ContentTitle(props) {
+	    var CustomTag = '' + _helper2.default.headerTag[props.type];
+
+	    return _react2.default.createElement(
+	        CustomTag,
+	        null,
+	        props.name
+	    );
+	};
+
+	exports.default = ContentTitle;
+
+/***/ }),
+/* 321 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _helper = __webpack_require__(319);
+
+	var _helper2 = _interopRequireDefault(_helper);
+
+	var _buttonListItem = __webpack_require__(322);
 
 	var _buttonListItem2 = _interopRequireDefault(_buttonListItem);
 
@@ -40485,7 +40538,7 @@
 	exports.default = ButtonList;
 
 /***/ }),
-/* 320 */
+/* 322 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -40498,7 +40551,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _helper = __webpack_require__(323);
+	var _helper = __webpack_require__(319);
 
 	var _helper2 = _interopRequireDefault(_helper);
 
@@ -40525,61 +40578,6 @@
 	};
 
 	exports.default = ButtonListItem;
-
-/***/ }),
-/* 321 */,
-/* 322 */,
-/* 323 */
-/***/ (function(module, exports) {
-
-	'use strict';
-
-	module.exports = {
-	    buttonList: ['Task 1', 'Task 2', 'Task 3'],
-	    path: '/conversion/',
-	    headerTag: {
-	        'h1': 'h1',
-	        'h2': 'h2',
-	        'h3': 'h3',
-	        'h4': 'h4',
-	        'h5': 'h5'
-	    },
-	    formatString: function formatString(str) {
-	        return str.replace(/\s/g, '').toLowerCase();
-	    }
-	};
-
-/***/ }),
-/* 324 */
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _react = __webpack_require__(2);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _helper = __webpack_require__(323);
-
-	var _helper2 = _interopRequireDefault(_helper);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var ContentTitle = function ContentTitle(props) {
-	    var CustomTag = '' + _helper2.default.headerTag[props.type];
-
-	    return _react2.default.createElement(
-	        CustomTag,
-	        null,
-	        props.name
-	    );
-	};
-
-	exports.default = ContentTitle;
 
 /***/ })
 /******/ ]);
