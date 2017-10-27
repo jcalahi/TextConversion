@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Editor, EditorState, convertFromRaw } from 'draft-js';
 
-import Util from './helper';
-import Title from './components/content/content-title';
-import ButtonList from './components/buttons/button-list';
+import ButtonList from './components/button/button-list';
+import ContainerTitle from './components/container/container-title';
+import ContainerBlock from './components/container/container-block';
+
+import { path } from './constants';
 
 class App extends Component {
     constructor() {
         super();
 
         this.state = {
-            editorState: EditorState.createEmpty(),
+            rawContent: {},
             selectedTask: null
         };
 
@@ -20,28 +21,25 @@ class App extends Component {
     render() {
         return (
             <div>
-                <Title name="JSON to HTML" type="h3"></Title>
+                <ContainerTitle name="JSON to HTML" type="header-three" />
                 <ButtonList 
                     onButtonClick={this.onButtonClick}
                     selectedTask={this.state.selectedTask}
                 />
                 <p></p>
-                <Editor 
-                    editorState={this.state.editorState} 
-                    onChange={editorState => this.setState({editorState})}
-                />
+                <ContainerBlock rawContent={this.state.rawContent} />
             </div>
         );
     }
     onButtonClick(name) {
         let self = this;
-        let url = Util.path + name
+        let url = path + name
 
         fetch(url)
             .then((response) => { return response.json(); })
             .then((content) => { 
                 self.setState({
-                    editorState: EditorState.createWithContent(convertFromRaw(content)),
+                    rawContent: content,
                     selectedTask: name
                 });
             }

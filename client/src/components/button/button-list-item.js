@@ -1,8 +1,8 @@
 import React from 'react';
-import Util from '../../helper';
+import { formatString } from '../../utils';
 
 const ButtonListItem = ({ buttonName, onButtonClick, selectedTask }) => {
-    let btn = Util.formatString(buttonName);
+    let btn = formatString(buttonName);
     
     return (
         <li className={(btn === selectedTask ? 'active' : '')} onClick={() => onButtonClick(btn)}>
