@@ -1,18 +1,21 @@
 import React, { Component } from 'react';
 import Utils from '../../utils';
 
-const ContainerBlockEntity = ({ data }) => {
-    const CustomElem = Utils.getElementType(data.type);
+import ListItem from './container-block-list-item';
 
-    function parser(tag, node) {
-        var Tag = Utils.getElementType(tag);
-        return <Tag>{node}</Tag>;
+const ContainerBlockEntity = ({ elementType, text, listItem }) => {
+    let HtmlElement = elementType;
+
+    if (listItem && listItem.length > 0) {
+        let items = listItem.map((e, idx) => {
+            return <ListItem text={e} key={`${HtmlElement}-${idx}`} />
+        });
+
+        return <HtmlElement>{items}</HtmlElement>;
     }
 
-    return ( // element tag should be dynamic
-        <CustomElem>
-            {data.text}
-        </CustomElem>
+    return (
+        <HtmlElement>{text}</HtmlElement>
     );
 };
 

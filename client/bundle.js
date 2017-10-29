@@ -64,7 +64,7 @@
 
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 
-	var _buttonList = __webpack_require__(186);
+	var _buttonList = __webpack_require__(185);
 
 	var _buttonList2 = _interopRequireDefault(_buttonList);
 
@@ -76,7 +76,7 @@
 
 	var _containerBlock2 = _interopRequireDefault(_containerBlock);
 
-	var _constants = __webpack_require__(185);
+	var _constants = __webpack_require__(186);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21953,29 +21953,6 @@
 
 /***/ }),
 /* 185 */
-/***/ (function(module, exports) {
-
-	'use strict';
-
-	module.exports = {
-	    buttonList: ['Task 1', 'Task 2', 'Task 3'],
-	    path: '/conversion/',
-	    htmlElement: {
-	        'header-one': 'h1',
-	        'header-two': 'h2',
-	        'header-three': 'h3',
-	        'header-four': 'h4',
-	        'header-five': 'h5',
-	        'unordered-list-item': 'ul',
-	        'ordered-list-item': 'ol',
-	        'BOLD': 'strong',
-	        'UNDERLINE': 'u',
-	        'ITALIC': 'em'
-	    }
-	};
-
-/***/ }),
-/* 186 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21988,7 +21965,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _constants = __webpack_require__(185);
+	var _constants = __webpack_require__(186);
 
 	var _buttonListItem = __webpack_require__(187);
 
@@ -22018,6 +21995,29 @@
 	};
 
 	exports.default = ButtonList;
+
+/***/ }),
+/* 186 */
+/***/ (function(module, exports) {
+
+	'use strict';
+
+	module.exports = {
+	    buttonList: ['Task 1', 'Task 2', 'Task 3'],
+	    path: '/conversion/',
+	    htmlElement: {
+	        'header-one': 'h1',
+	        'header-two': 'h2',
+	        'header-three': 'h3',
+	        'header-four': 'h4',
+	        'header-five': 'h5',
+	        'unordered-list-item': 'ul',
+	        'ordered-list-item': 'ol',
+	        'BOLD': 'strong',
+	        'UNDERLINE': 'u',
+	        'ITALIC': 'em'
+	    }
+	};
 
 /***/ }),
 /* 187 */
@@ -22065,24 +22065,26 @@
 
 	'use strict';
 
-	var _constants = __webpack_require__(185);
+	var _constants = __webpack_require__(186);
 
 	module.exports = {
-	    /**
-	     * @param {string} str - string input e.g "Task 1,  Task 2"
-	     * @returns {string} e.g "task1, task2"
-	     */
+	    findPropIndex: function findPropIndex(arr, e) {
+	        return arr.map(function (obj) {
+	            return obj.props.elementType;
+	        }).indexOf(e);
+	    },
 	    formatString: function formatString(str) {
 	        return str.replace(/\s/g, '').toLowerCase();
 	    },
 	    getElementType: function getElementType(type) {
 	        return _constants.htmlElement[type] || 'p';
 	    },
-	    decorateText: function decorateText(style) {
-	        var Elem = '' + style;
-	        return function (text, from, to) {
-	            return '<Elem>text.substr(from, to)</Elem>';
-	        };
+	    getListItem: function getListItem(arr, tag) {
+	        return arr.filter(function (e) {
+	            return e.type === tag;
+	        }).map(function (obj) {
+	            return obj.text;
+	        });
 	    }
 	};
 
@@ -22132,13 +22134,17 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _utils = __webpack_require__(188);
+
+	var _utils2 = _interopRequireDefault(_utils);
+
 	var _containerBlockEntity = __webpack_require__(191);
 
 	var _containerBlockEntity2 = _interopRequireDefault(_containerBlockEntity);
 
-	var _utils = __webpack_require__(188);
+	var _containerBlockListItem = __webpack_require__(194);
 
-	var _utils2 = _interopRequireDefault(_utils);
+	var _containerBlockListItem2 = _interopRequireDefault(_containerBlockListItem);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -22146,13 +22152,42 @@
 	    var rawContent = _ref.rawContent;
 
 	    var blocks = [];
-
+	    /**
+	     * @TODO: 
+	     * This works, but I will likely refactor to keep it DRY and 
+	     * less procedural
+	     */
 	    if (rawContent.blocks) {
-	        blocks = rawContent.blocks.map(function (block) {
-	            return _react2.default.createElement(_containerBlockEntity2.default, {
-	                data: block,
-	                key: block.key
-	            });
+	        var entities = rawContent.blocks;
+	        var unorderedList = _utils2.default.getListItem(entities, 'unordered-list-item');
+	        var orderedList = _utils2.default.getListItem(entities, 'ordered-list-item');
+
+	        entities.forEach(function (entity, idx) {
+	            var eType = _utils2.default.getElementType(entity.type);
+
+	            if (eType !== 'ul' && eType !== 'ol') {
+	                blocks.push(_react2.default.createElement(_containerBlockEntity2.default, {
+	                    elementType: eType,
+	                    text: entity.text,
+	                    key: eType + '-' + idx
+	                }));
+	            } else if (eType === 'ul') {
+	                if (_utils2.default.findPropIndex(blocks, eType) === -1) {
+	                    blocks.push(_react2.default.createElement(_containerBlockEntity2.default, {
+	                        elementType: eType,
+	                        listItem: unorderedList,
+	                        key: eType + '-' + idx
+	                    }));
+	                }
+	            } else if (eType === 'ol') {
+	                if (_utils2.default.findPropIndex(blocks, eType) === -1) {
+	                    blocks.push(_react2.default.createElement(_containerBlockEntity2.default, {
+	                        elementType: eType,
+	                        listItem: orderedList,
+	                        key: eType + '-' + idx
+	                    }));
+	                }
+	            }
 	        });
 	    }
 
@@ -22183,32 +22218,69 @@
 
 	var _utils2 = _interopRequireDefault(_utils);
 
+	var _containerBlockListItem = __webpack_require__(194);
+
+	var _containerBlockListItem2 = _interopRequireDefault(_containerBlockListItem);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var ContainerBlockEntity = function ContainerBlockEntity(_ref) {
-	    var data = _ref.data;
+	    var elementType = _ref.elementType,
+	        text = _ref.text,
+	        listItem = _ref.listItem;
 
-	    var CustomElem = _utils2.default.getElementType(data.type);
+	    var HtmlElement = elementType;
 
-	    function parser(tag, node) {
-	        var Tag = _utils2.default.getElementType(tag);
+	    if (listItem && listItem.length > 0) {
+	        var items = listItem.map(function (e, idx) {
+	            return _react2.default.createElement(_containerBlockListItem2.default, { text: e, key: HtmlElement + '-' + idx });
+	        });
+
 	        return _react2.default.createElement(
-	            Tag,
+	            HtmlElement,
 	            null,
-	            node
+	            items
 	        );
 	    }
 
-	    return (// element tag should be dynamic
-	        _react2.default.createElement(
-	            CustomElem,
-	            null,
-	            data.text
-	        )
+	    return _react2.default.createElement(
+	        HtmlElement,
+	        null,
+	        text
 	    );
 	};
 
 	exports.default = ContainerBlockEntity;
+
+/***/ }),
+/* 192 */,
+/* 193 */,
+/* 194 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _react = __webpack_require__(2);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ListItem = function ListItem(_ref) {
+	    var text = _ref.text;
+
+	    return _react2.default.createElement(
+	        'li',
+	        null,
+	        text
+	    );
+	};
+
+	exports.default = ListItem;
 
 /***/ })
 /******/ ]);

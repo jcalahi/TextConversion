@@ -1,20 +1,20 @@
 import { htmlElement } from './constants';
 
 module.exports = {
-    /**
-     * @param {string} str - string input e.g "Task 1,  Task 2"
-     * @returns {string} e.g "task1, task2"
-     */
+    findPropIndex: (arr, e) => {
+        return arr.map((obj) => {
+            return obj.props.elementType;
+        }).indexOf(e);
+    },
     formatString: (str) => {
         return str.replace(/\s/g, '').toLowerCase();
     },
     getElementType: (type) => {
         return htmlElement[type] || 'p';
     },
-    decorateText: (style) => {
-        var Elem = `${style}`;
-        return function(text, from, to) {
-            return '<Elem>text.substr(from, to)</Elem>';
-        }
+    getListItem: (arr, tag) => {
+        return arr.filter((e) => {
+            return e.type === tag;
+        }).map((obj) => { return obj.text });
     }
 };
