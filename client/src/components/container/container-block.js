@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Utils from '../../utils';
 
 import BlockEntity from './container-block-entity';
@@ -12,12 +12,12 @@ const ContainerBlock = ({ rawContent }) => {
      * less procedural
      */
     if (rawContent.blocks) {
-        var entities = rawContent.blocks;
-        var unorderedList = Utils.getListItem(entities, 'unordered-list-item');
-        var orderedList = Utils.getListItem(entities, 'ordered-list-item');
+        let entities = rawContent.blocks;
+        let unorderedList = Utils.getListItem(entities, 'unordered-list-item');
+        let orderedList = Utils.getListItem(entities, 'ordered-list-item');
 
         entities.forEach((entity, idx) => {
-            var eType = Utils.getElementType(entity.type);
+            let eType = Utils.getElementType(entity.type);
 
             if (eType !== 'ul' && eType !== 'ol') {
                 blocks.push(
