@@ -6,49 +6,39 @@ import ListItem from './container-block-list-item';
 
 const ContainerBlock = ({ rawContent }) => {
     let blocks = [];
-    /**
-     * @TODO: 
-     * This works, but I will likely refactor to keep it DRY and 
-     * less procedural
-     */
+
     if (rawContent.blocks) {
         let entities = rawContent.blocks;
-        let unorderedList = Utils.getListItem(entities, 'unordered-list-item');
-        let orderedList = Utils.getListItem(entities, 'ordered-list-item');
 
-        entities.forEach((entity, idx) => {
+        blocks = entities.map((entity, idx, arr) => {
             let eType = Utils.getElementType(entity.type);
+            let isListItem = eType === 'ul' || eType === 'ol' ? true : false;
+            let listItems = isListItem === true ? Utils.getListItem(arr, entity.type) : null;
 
-            if (eType !== 'ul' && eType !== 'ol') {
-                blocks.push(
-                    <BlockEntity 
-                        elementType={eType}
-                        text={entity.text}
-                        key={`${eType}-${idx}`}
-                    />
-                );
-            } else if (eType === 'ul') {
-                if (Utils.findPropIndex(blocks, eType) === -1) {
-                    blocks.push(
-                        <BlockEntity 
-                            elementType={eType}
-                            listItem={unorderedList}
-                            key={`${eType}-${idx}`}
-                        />
-                    );
+            return (
+                <BlockEntity
+                    inlineStyles={entity.inlineStyleRanges}
+                    elementType={eType}
+                    listItem={listItems}
+                    text={isListItem ? '' : entity.text}
+                    key={entity.key}
+                />
+            );
+        }).reduce((prev, curr) => {
+            let elementType = curr.props.elementType;
+            let isListItem = elementType === 'ul' || elementType === 'ol' ? true : false;
+            let blockIndex = Utils.findPropIndex(prev, elementType);
+
+            if (isListItem) {
+                if (blockIndex === -1) {
+                    prev.push(curr);
                 }
-            }  else if (eType === 'ol') {
-                if (Utils.findPropIndex(blocks, eType) === -1) {
-                    blocks.push(
-                        <BlockEntity 
-                            elementType={eType}
-                            listItem={orderedList}
-                            key={`${eType}-${idx}`}
-                        />
-                    );
-                }
+            } else {
+                prev.push(curr);
             }
-        });
+            
+            return prev;
+        }, []);
     }
 
     return (
